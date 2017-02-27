@@ -3,7 +3,7 @@ import numpy as np
 
 
 
-G= nx.read_gml('/Users/aazizibo/Desktop/feb_21_graph_gen/make nets/original5000.gml') 
+#G= nx.read_gml('/Users/aazizibo/Desktop/feb_21_graph_gen/make nets/original5000.gml') 
 
 
  #E=G.number_of_edges()

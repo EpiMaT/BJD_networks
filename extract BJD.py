@@ -1,16 +1,6 @@
 import networkx as nx
 import numpy as np
-import copy
-import multiprocessing
-#import graphs as g
-# import cProfile
-import random
-import matplotlib.pyplot as plt
-import math
-import numpy as np
-import sys
-import time
-from networkx.algorithms import bipartite
+
 
 
 G= nx.read_gml('/Users/aazizibo/Desktop/feb_21_graph_gen/make nets/original5000.gml') 

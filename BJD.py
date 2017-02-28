@@ -65,3 +65,28 @@ def extract(G):
     BJD=Bjd.transpose()
 
     return BJD
+
+
+
+def validate(ddtable):
+    """Checks if a degree-degree table is valid"""
+    margin_upp = ddtable.sum(axis=1).transpose()
+    count_upp = count_vec(margin_upp)
+    remainder_upp = np.remainder(margin_upp, count_upp)
+
+    margin_low = ddtable.sum(axis=0)
+    count_low = count_vec(margin_low)
+    remainder_low = np.remainder(margin_low, count_low)
+
+    if not ((remainder_low == 0).all() and (remainder_upp == 0).all()):
+        return False
+
+    # e_ij <= d^u_i * d^l_j
+    div_upp = np.divide(margin_upp, count_upp)
+    div_low = np.divide(margin_low, count_low)
+    for i in xrange(0,div_upp.size):
+        for j in xrange(0,div_low.size):
+            if table[i,j] > div_upp.A1[i] * div_low.A1[j]: # is this the right way to access this?
+                print (i, j, table[i,j], div_upp.A1[i] * div_low.A1[j])
+                return False
+    return True

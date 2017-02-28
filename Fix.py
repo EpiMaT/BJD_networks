@@ -13,7 +13,7 @@ _lower = 1
 
 
 
-def subA(G):
+def sub(G):
     Sub_G=G.copy()
     m_list= [n[0] for n in G.nodes(data=True) if BJD.is_upper(n)]#list of men
     print(m_list)

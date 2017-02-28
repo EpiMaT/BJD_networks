@@ -110,3 +110,82 @@ def validate(ddtable):
                 print (i, j, ddtable[i,j], div_upp.A1[i] * div_low.A1[j])
                 return False
     return True
+
+
+
+def deg_distr(degdeg_distr,bipartite):
+    """Returns degree distribution"""
+    if bipartite == 1: # lower
+        margin = degdeg_distr.sum(axis=0)
+    else:
+        margin = degdeg_distr.sum(axis=1).transpose()
+
+    count = count_vec(margin)
+    divide = np.divide(margin, count)
+    return divide
+
+def upper_deg_distr(table):
+    return deg_distr(table,0)
+
+def lower_deg_distr(table):
+    return deg_distr(table,1)
+ 
+def choose(ls):
+    i = np.random.randint(0,len(ls))
+    return ls[i]
+
+def choose_and_remove(ls):
+    i = np.random.randint(0,len(ls))
+    return ls.pop(i)
+
+def choose_and_remove_with_rank(ls,ranker):
+    idx = 0
+    sval = ranker (ls[idx])
+    for j in xrange(1,len(ls)):
+        if sval == ranker (ls[j]):
+            idx = idx + 1
+        else:
+            break
+    i = np.random.randint(0,idx+1)
+    return ls.pop(i)
+
+
+def weighted_choice(li, which):
+    total = reduce(lambda x,y: x+y, map(lambda x: x[which], li))
+    pick = np.random.randint(0,int(total))
+    lbound = 0
+    for entry in li:
+        if pick <= lbound:
+            return entry
+        else:
+           lbound = lbound + entry[1]
+    return li[-1]
+
+def compare_graph_to_table(G, table, dual_check):
+    test_mat = table.copy()
+
+    for edge in G.edges():
+        (node1, node2) = edge
+        if dual_check and G.number_of_edges(node1, node2) > 1:
+            # print G.edges()
+            return -1, test_mat
+
+        n1degi = G.degree(node1)-1
+        n2degi = G.degree(node2)-1
+
+        if G.node[node1]['bipartite'] == 0:
+            test_mat[(n1degi,n2degi)] = test_mat[n1degi,n2degi] - 1
+        else:
+            test_mat[n2degi,n1degi] = test_mat[n2degi,n1degi] - 1
+    # print test_mat
+    nz = np.count_nonzero(test_mat)
+    return nz, test_mat
+
+def list_edge_degs(degdeg_distr):
+    (row,col) = degdeg_distr.shape
+    edges = []
+    for i in xrange(0,row):
+        for j in xrange(0,col):
+            for k in xrange(0,degdeg_distr[i,j]):
+                edges.append((i+1,j+1))
+    return edges

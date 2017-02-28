@@ -11,7 +11,7 @@ ddtable = np.array(ddtable)
 
 #print(np.transpose(ddtable))
 #print(BJD.validate(ddtable))
-M=Fix.subA(G)
+M=Fix.sub(G)
 print M.size()
 
 

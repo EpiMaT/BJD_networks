@@ -1,5 +1,4 @@
 import numpy as np
-import input as ip
 
 _node = 0
 _data = 1

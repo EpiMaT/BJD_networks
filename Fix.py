@@ -1,4 +1,3 @@
-
 import numpy as np
 import random
 import BJD
@@ -15,7 +14,7 @@ _lower = 1
 
 def subA(G):
     Sub_G=G.copy()
-    m_list= [n[0] for n in G.nodes(data=True) if is_lower(n)]#list of men
+    m_list= [n[0] for n in G.nodes(data=True) if BJD.is_lower(n)]#list of men
     for i in Sub_G.nodes():
         Sub_G.node[i]['primary_partner']=i     
     for i in m_list:

@@ -1,5 +1,13 @@
 import numpy as np
 
+try:
+    xrange
+except NameError:
+    print("Running in Python 3")
+    xrange = range
+else:
+    print("Running in Python 2")
+
 _node = 0
 _data = 1
 

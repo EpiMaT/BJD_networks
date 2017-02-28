@@ -1,0 +1,5 @@
+# These are pattern matches for file names.
+# This list will be ignored by git, changes won't show as 'uncommitted changes'
+
+# Compiled python
+*.pyc

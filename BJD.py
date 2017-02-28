@@ -65,6 +65,19 @@ def extract(G):
 
     return BJD
 
+#-----------------------------------------------------------------------------------
+
+
+def count_vec(vec):
+    """Creates row vector [1, .., n] of the same length as vec"""
+    return np.matrix(np.arange(1,product(vec.shape)+1))
+
+def product(tuple):
+    """Calculates the product of a tuple"""
+    prod = 1
+    for x in tuple:
+        prod = prod * x
+    return prod
 
 
 def validate(ddtable):
@@ -85,7 +98,7 @@ def validate(ddtable):
     div_low = np.divide(margin_low, count_low)
     for i in xrange(0,div_upp.size):
         for j in xrange(0,div_low.size):
-            if table[i,j] > div_upp.A1[i] * div_low.A1[j]: # is this the right way to access this?
-                print (i, j, table[i,j], div_upp.A1[i] * div_low.A1[j])
+            if ddtable[i,j] > div_upp.A1[i] * div_low.A1[j]: # is this the right way to access this?
+                print (i, j, ddtable[i,j], div_upp.A1[i] * div_low.A1[j])
                 return False
     return True

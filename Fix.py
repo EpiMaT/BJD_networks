@@ -1,14 +1,7 @@
 
 import numpy as np
 import random
-
-try:
-    xrange
-except NameError:
-    print("Running in Python 3")
-    xrange = range
-else:
-    print("Running in Python 2")
+import BJD
 
 
 
@@ -18,28 +11,6 @@ _data = 1
 _upper = 0
 _lower = 1
 
-
-
-def add_nodes(B, degvec, letter, bipartite):
-    """Add nodes with a letter prefix, and bipartite data to the graph B"""
-    mcount = 0
-    d = 1
-    for deg in np.nditer(degvec):
-        for i in xrange(1,deg+1):
-            mcount = mcount + 1
-            node = letter+'{}'.format(mcount)
-            B.add_node(node, bipartite=bipartite, deg=d)
-        d = d + 1
-
-def add_upper_nodes(B, degvec):
-    add_nodes(B, degvec, 'u', _upper)
-def add_lower_nodes(B, degvec):
-    add_nodes(B, degvec, 'l', _lower)
-
-def is_upper(datanode):
-    return datanode[_data]['bipartite'] == 0
-def is_lower(datanode):
-    return not is_upper(datanode)
 
 
 def subA(G):
@@ -66,34 +37,4 @@ def subA(G):
         del Sub_G.node[i]['primary_partner']
     return Sub_G
 #---------------------------------------
- # Graph output description:
-#   bipartite attribute: 0 is upper, 1 is lower.
-def count_vec(vec):
-    """Creates row vector [1, .., n] of the same length as vec"""
-    return np.matrix(np.arange(1,product(vec.shape)+1))
-
-def product(tuple):
-    """Calculates the product of a tuple"""
-    prod = 1
-    for x in tuple:
-        prod = prod * x
-    return prod
-
-
-
-def deg_distr(degdeg_distr,bipartite):
-    """Returns degree distribution"""
-    if bipartite == 1: # lower
-        margin = degdeg_distr.sum(axis=0)
-    else:
-        margin = degdeg_distr.sum(axis=1).transpose()
-
-    count = count_vec(margin)
-    divide = np.divide(margin, count)
-    return divide
-
-def upper_deg_distr(table):
-    return deg_distr(table,0)
-
-def lower_deg_distr(table):
-    return deg_distr(table,1)
+ 

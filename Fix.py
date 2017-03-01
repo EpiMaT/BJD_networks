@@ -37,5 +37,5 @@ def sub(G):
     for i in Sub_G.nodes():
         del Sub_G.node[i]['primary_partner']
     return Sub_G
-#---------------------------------------
+
  

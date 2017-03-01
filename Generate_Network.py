@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
 import copy
-import BJD
+import handle_funcs as HF
 # import cProfile
 
 
@@ -10,13 +10,6 @@ _data = 1
 
 _upper = 0
 _lower = 1
-
-# Graph output description:
-#   bipartite attribute: 0 is upper, 1 is lower.
-
-
-
-
 
 
 def make_graph(B, degdeg_distr, method_ext):
@@ -40,11 +33,11 @@ def make_graph(B, degdeg_distr, method_ext):
     degdeg_remaining = degdeg_distr.copy()
 
     # Fill graph with nodes
-    BJD.add_upper_nodes(B, BJD.upper_deg_distr(degdeg_remaining))
-    BJD.add_lower_nodes(B, BJD.lower_deg_distr(degdeg_remaining))
+    HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
+    HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
 
-    upper_nodes = [n for n in B.nodes(data=True) if BJD.is_upper(n)]
-    lower_nodes = [n for n in B.nodes(data=True) if BJD.is_lower(n)]
+    upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
+    lower_nodes = [n for n in B.nodes(data=True) if HF.is_lower(n)]
 
     double_edges = []
     # Fill graph with edges
@@ -54,7 +47,7 @@ def make_graph(B, degdeg_distr, method_ext):
         method = method_ext
 
     # top_node = ''
-    edge_degs_list = BJD.list_edge_degs(degdeg_remaining)
+    edge_degs_list = HF.list_edge_degs(degdeg_remaining)
     if method == 'random_edge':
         pass
     elif method == 'max_stub_min_deg':
@@ -72,7 +65,7 @@ def make_graph(B, degdeg_distr, method_ext):
         node_deg_sort = lambda x: -max_deg(x)
         nodes_sorted = sorted(B.nodes(data=True), key=node_deg_sort)
         top_nodes = [n for n in nodes_sorted if node_deg_sort(n) == node_deg_sort(nodes_sorted[0])]
-        top_node = BJD.choose(top_nodes)
+        top_node = HF.choose(top_nodes)
         nodes_sorted.remove(top_node)
     else:
         return ("Not a valid method -- {}".format(method), B)
@@ -85,13 +78,13 @@ def make_graph(B, degdeg_distr, method_ext):
             if curr_deg(top_node) >= max_deg(top_node):
                 nodes_sorted = [n for n in nodes_sorted if curr_deg(n) < max_deg(n)]
                 top_nodes = [n for n in nodes_sorted if node_deg_sort(n) == node_deg_sort(nodes_sorted[0])]
-                top_node = BJD.choose(top_nodes)
+                top_node = HF.choose(top_nodes)
                 nodes_sorted.remove(top_node)
 
             tdeg = max_deg(top_node)
 
             possibles = []
-            if BJD.is_upper(top_node):
+            if HF.is_upper(top_node):
                 for low in lower_nodes:
                     if curr_deg(low) >= max_deg(low):
                         continue
@@ -103,7 +96,7 @@ def make_graph(B, degdeg_distr, method_ext):
                         impossibles.append((top_node,low))
                 if len(possibles) > 0:
                     edge_found = True
-                    (upper,lower) = (top_node,BJD.choose(possibles))
+                    (upper,lower) = (top_node,HF.choose(possibles))
                     edge = (tdeg,max_deg(lower))
             else:
                 for upp in upper_nodes:
@@ -117,15 +110,15 @@ def make_graph(B, degdeg_distr, method_ext):
                         impossibles.append((upp,top_node))
                 if len(possibles) > 0:
                     edge_found = True
-                    (upper,lower) = (BJD.choose(possibles),top_node)
+                    (upper,lower) = (HF.choose(possibles),top_node)
                     edge = (max_deg(upper),tdeg)
 
         elif method == 'max_stub_min_deg':
             # Pick upper node
             possible_nodes = next_most_free(B.nodes(data=True))
-            pnode = BJD.choose(possible_nodes)
+            pnode = HF.choose(possible_nodes)
 
-            if BJD.is_upper(pnode):
+            if HF.is_upper(pnode):
                 degs = degdeg_remaining[max_deg(pnode)-1].A1
                 other_nodes = lower_nodes
             else:
@@ -138,7 +131,7 @@ def make_graph(B, degdeg_distr, method_ext):
 
             impossibles = []
             for _ in xrange(0, len(possible_edges)):
-                entry = BJD.weighted_choice(desired_edges, 1)
+                entry = HF.weighted_choice(desired_edges, 1)
                 # Pick other node
                 remaining_nodes = []
                 for onode in other_nodes:
@@ -146,7 +139,7 @@ def make_graph(B, degdeg_distr, method_ext):
                         if not is_neighbor(onode, pnode):
                             remaining_nodes.append(onode)
                         else:
-                            if BJD.is_upper(pnode):
+                            if HF.is_upper(pnode):
                                 impossibles.append((pnode, onode))
                             else:
                                 impossibles.append((onode, pnode))
@@ -155,8 +148,8 @@ def make_graph(B, degdeg_distr, method_ext):
                     desired_edges.remove(entry)
                     continue
 
-                pnode_ = BJD.choose(remaining_nodes)
-                if BJD.is_upper(pnode):
+                pnode_ = HF.choose(remaining_nodes)
+                if HF.is_upper(pnode):
                     (upper,lower) = (pnode,pnode_)
                 else:
                     (upper,lower) = (pnode_,pnode)
@@ -165,7 +158,7 @@ def make_graph(B, degdeg_distr, method_ext):
                 break
         else:
             if method == 'random_edge':
-                edge = BJD.choose_and_remove(edge_degs_list)
+                edge = HF.choose_and_remove(edge_degs_list)
 
             elif method == 'total_edge_deg':
                 idx = 0
@@ -178,7 +171,7 @@ def make_graph(B, degdeg_distr, method_ext):
                 edge = edge_degs_list.pop(np.random.randint(0,idx+1))
 
             elif method == 'max_edge_deg':
-                edge = BJD.choose_and_remove_with_rank(edge_degs_list, max_edge_sort)
+                edge = HF.choose_and_remove_with_rank(edge_degs_list, max_edge_sort)
 
             upper_options = [n for n in upper_nodes if max_deg(n) == edge[0] and curr_deg(n) < max_deg(n)]
             lower_options = [n for n in lower_nodes if max_deg(n) == edge[1] and curr_deg(n) < max_deg(n)]
@@ -193,13 +186,13 @@ def make_graph(B, degdeg_distr, method_ext):
                         possibles.append(possible_edge)
 
             if len(possibles) > 0:
-                (upper,lower) = BJD.choose(possibles)
+                (upper,lower) = HF.choose(possibles)
                 edge_found = True
 
         if not edge_found:
             if len(impossibles) <= 0:
                 return ("Major error -- {}".format(edge_i), B)
-            (upper,lower) = BJD.choose(impossibles)
+            (upper,lower) = HF.choose(impossibles)
             edge = (max_deg(upper),max_deg(lower))
             double_edges.append((upper,lower))
 
@@ -207,7 +200,7 @@ def make_graph(B, degdeg_distr, method_ext):
         B.add_edge(upper[_node],lower[_node])
         degdeg_remaining[edge[0]-1,edge[1]-1] = degdeg_remaining[edge[0]-1,edge[1]-1] - 1
 
-    nz, tm = BJD.compare_graph_to_table(B, degdeg_distr, False)
+    nz, tm = HF.compare_graph_to_table(B, degdeg_distr, False)
     if nz != 0:
         return ("Failed to make valid graph (allowing multiple edges).", B)
 
@@ -270,11 +263,11 @@ def make_graph(B, degdeg_distr, method_ext):
             print upper, lower, B.edges()
             return ("Cannot rewire.", B)
 
-        tup = BJD.choose(alternateUV)
+        tup = HF.choose(alternateUV)
         if type(tup[2]) is list:
             (u_prime, l_prime, l_others, u_others) = tup
-            l_other = BJD.choose(l_others)
-            u_other = BJD.choose(u_others)
+            l_other = HF.choose(l_others)
+            u_other = HF.choose(u_others)
 
             B.remove_edge(upper[_node],lower[_node])
             B.remove_edge(u_prime[_node],l_other)
@@ -286,7 +279,7 @@ def make_graph(B, degdeg_distr, method_ext):
             rewire3 = rewire3 + 1
         else:
             (do_prime, do_partner, do_base, do_others) = tup
-            do_other = BJD.choose(do_others)
+            do_other = HF.choose(do_others)
 
             B.remove_edge(do_base[_node],do_partner[_node])
             B.remove_edge(do_prime[_node],do_other)
@@ -295,7 +288,7 @@ def make_graph(B, degdeg_distr, method_ext):
             B.add_edge(do_prime[_node],do_partner[_node])
             rewire2 = rewire2 + 1
 
-    nz, tm = BJD.compare_graph_to_table(B, degdeg_distr, True)
+    nz, tm = HF.compare_graph_to_table(B, degdeg_distr, True)
     if nz != 0:
         return ("Table not comparable to graph, {}: ndouble {}".format(nz,len(double_edges)), B)
 

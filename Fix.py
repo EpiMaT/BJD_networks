@@ -1,6 +1,6 @@
 import numpy as np
 import random
-import BJD
+import handle_funcs as HF
 import copy
 
 
@@ -15,7 +15,7 @@ _lower = 1
 
 def sub(G):
     Sub_G=G.copy()
-    m_list= [n[0] for n in G.nodes(data=True) if BJD.is_upper(n)]#list of men
+    m_list= [n[0] for n in G.nodes(data=True) if HF.is_lower(n)]#list of men
     print(m_list)
     for i in Sub_G.nodes():
         Sub_G.node[i]['primary_partner']=i     

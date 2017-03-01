@@ -5,7 +5,9 @@ import graphs as g
 import Fix
 import Generate_Network 
 import handle_funcs as HF
+import Reduced_BJD as RBJD
 reload(HF)
+reload(RBJD)
 reload(Fix)
 reload(BJD)
 reload(Generate_Network)
@@ -19,6 +21,7 @@ ddtable = np.array(ddtable)
 
 
 B=Generate_Network.make_graph(nx.Graph(),g.small,'random_edge')
-print(B.edges())
-sb=Fix.sub(B)
-print(sb.edges())
+print('original net', B.edges())
+S=Fix.sub(B)
+print('sub net', S.edges())
+print('matrix',RBJD.RBJD(B,S))

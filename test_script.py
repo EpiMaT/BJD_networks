@@ -4,6 +4,8 @@ import numpy as np
 import graphs as g
 import Fix
 import Generate_Network 
+import handle_funcs as HF
+reload(HF)
 reload(Fix)
 reload(BJD)
 reload(Generate_Network)

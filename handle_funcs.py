@@ -1,5 +1,10 @@
 import numpy as np
 
+_node = 0
+_data = 1
+
+_upper = 0
+_lower = 1
 def add_nodes(B, degvec, letter, bipartite):
     """Add nodes with a letter prefix, and bipartite data to the graph B"""
     mcount = 0

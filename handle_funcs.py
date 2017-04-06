@@ -1,16 +1,30 @@
 import numpy as np
+import functools
+
+try:
+    xrange
+except NameError:
+    print("Running in Python 3")
+    xrange = range
+else:
+    print("Running in Python 2")
 
 _node = 0
 _data = 1
 
 _upper = 0
 _lower = 1
+
+
 def add_nodes(B, degvec, letter, bipartite):
-    """Add nodes with a letter prefix, and bipartite data to the graph B"""
+    """
+    Take a graph, a vector of degrees, a prefix for node naming, bipartite data
+    Return a graph with nodes added
+    """
     mcount = 0
     d = 1
     for deg in np.nditer(degvec):
-        for i in xrange(1,deg+1):
+        for i in xrange(1,int(deg)+1):
             mcount = mcount + 1
             node = letter+'{}'.format(mcount)
             B.add_node(node, bipartite=bipartite, deg=d)
@@ -26,6 +40,10 @@ def is_upper(datanode):
 def is_lower(datanode):
     return not is_upper(datanode)
 
+def upper_nodes(B):
+    return [n for n in B.nodes(data=True) if is_upper(n)]
+def lower_nodes(B):
+    return [n for n in B.nodes(data=True) if is_lower(n)]
 
 def count_vec(vec):
     """Creates row vector [1, .., n] of the same length as vec"""
@@ -80,7 +98,7 @@ def upper_deg_distr(table):
 
 def lower_deg_distr(table):
     return deg_distr(table,1)
- 
+
 def choose(ls):
     i = np.random.randint(0,len(ls))
     return ls[i]
@@ -102,7 +120,7 @@ def choose_and_remove_with_rank(ls,ranker):
 
 
 def weighted_choice(li, which):
-    total = reduce(lambda x,y: x+y, map(lambda x: x[which], li))
+    total = functools.reduce(lambda x,y: x+y, map(lambda x: x[which], li))
     pick = np.random.randint(0,int(total))
     lbound = 0
     for entry in li:

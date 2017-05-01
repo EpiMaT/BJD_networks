@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 
 _node = 0
 _data = 1
@@ -140,3 +141,10 @@ def list_edge_degs(degdeg_distr):
             for k in xrange(0,degdeg_distr[i,j]):
                 edges.append((i+1,j+1))
     return edges
+    
+def max_shortest_path(G):
+    a=[]
+    for i in G.nodes():
+        p=len(nx.shortest_path(G,source=i))-1
+        a.append(p) 
+    return max(a)   

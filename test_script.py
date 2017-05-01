@@ -25,7 +25,3 @@ print('original net', B.edges())
 S=Fix.sub(B)
 print('sub net', S.edges())
 
-for i in B.nodes():
-    for j in B.neighbors(i):
-        print(len(nx.shortest_path(B,source=i,target=j))-1)
-        print(len(nx.shortest_path(B,source=j,target=i))-1)

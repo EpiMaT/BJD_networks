@@ -17,7 +17,7 @@ degdeg_distr= BJD table,
 method_ext=method tomake grapg,
 B_old=Previous Grapg to choose partner from
 '''
-def make_graph(B, degdeg_distr, method_ext,B_old):
+def make_graph(degdeg_distr, method_ext,B_old):
     """Take an empty Graph, B, a BJD matrix and a desired method of generation"""
     M=HF.max_shortest_path(B_old)
     
@@ -33,10 +33,14 @@ def make_graph(B, degdeg_distr, method_ext,B_old):
     n_edges = degdeg_distr.sum()
     degdeg_remaining = degdeg_distr.copy()
 
-    # Fill graph with nodes
-    HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
-    HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
 
+    B=B_old.copy()
+    for e in B.edges():
+        B.remove_edge(*e) 
+    # Fill graph with nodes
+    #HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
+    #HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
+    
     upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
     lower_nodes = [n for n in B.nodes(data=True) if HF.is_lower(n)]
 

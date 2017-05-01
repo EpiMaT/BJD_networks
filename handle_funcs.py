@@ -148,3 +148,8 @@ def max_shortest_path(G):
         p=len(nx.shortest_path(G,source=i))-1
         a.append(p) 
     return max(a)   
+    
+def path_exists(G,source,target):
+    for path in nx.all_simple_paths(G,source,target):
+        return True  #if it finds one, it returns True, and gets out of the function.  It doesn't look for the next.
+    return False  #if it didn't find one, it gets out of the function.    

@@ -15,12 +15,12 @@ _lower = 1
 B=empty grapg to be made,
 degdeg_distr= BJD table,
 method_ext=method tomake grapg,
-G=Previous Grapg to choose partner from
+B_old=Previous Grapg to choose partner from
 '''
-def make_graph(B, degdeg_distr, method_ext,G):
+def make_graph(B, degdeg_distr, method_ext,B_old):
     """Take an empty Graph, B, a BJD matrix and a desired method of generation"""
-    M=HF.max_shortest_path(G)
-    print M
+    M=HF.max_shortest_path(B_old)
+    
     def max_deg(nodedata):
         return nodedata[_data]['deg']
 
@@ -69,12 +69,13 @@ def make_graph(B, degdeg_distr, method_ext,G):
             possibles = []
             m=0
             k=3
-            while m==0 :
+            while m==0 & k<=M:
                 
                 for upp in upper_options:
                     for low in lower_options:
-                        if len(nx.shortest_path(G,source=upp,target=low))-1==k:#added by soodeh
-                           possible_edge = (upp,low)
+                        if HF.path_exists(B_old,upp,low):
+                           if len(nx.shortest_path(B_old,source=upp,target=low))-1==k:
+                              possible_edge = (upp,low)
                         if is_neighbor(upp, low):
                            impossibles.append(possible_edge)
                         else:

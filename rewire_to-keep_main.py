@@ -18,7 +18,7 @@ def rewire(G,SG,NB):
     B=SG.copy()
     m_list= [n[0] for n in B.nodes(data=True) if HF.is_lower(n)]#list of men
     f_list= [n[0] for n in B.nodes(data=True) if HF.is_upper(n)]#list of women
-    for i in m_list:
+    for i in m_list:#primary partners for each node
         B.node[i]['primary']=SG.neighbors(i)[0]
     for i in m_list:
         j=B.node[i]['primary'] 

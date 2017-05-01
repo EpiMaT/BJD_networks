@@ -11,10 +11,16 @@ _data = 1
 _upper = 0
 _lower = 1
 
-
-def make_graph(B, degdeg_distr, method_ext):
+'''
+B=empty grapg to be made,
+degdeg_distr= BJD table,
+method_ext=method tomake grapg,
+G=Previous Grapg to choose partner from
+'''
+def make_graph(B, degdeg_distr, method_ext,G):
     """Take an empty Graph, B, a BJD matrix and a desired method of generation"""
-
+    M=HF.max_shortest_path(G)
+    print M
     def max_deg(nodedata):
         return nodedata[_data]['deg']
 
@@ -23,11 +29,6 @@ def make_graph(B, degdeg_distr, method_ext):
 
     def is_neighbor(n1, n2):
         return n1[_node] in B.neighbors(n2[_node])
-
-    def next_most_free(list):
-        """Sort nodes first ascending curr-max degree, then descending max degree"""
-        sorted_list = sorted(list, key=max_stub_min_deg_sort)
-        return [n for n in sorted_list if max_stub_min_deg_sort(n) == max_stub_min_deg_sort(sorted_list[0])]
 
     n_edges = degdeg_distr.sum()
     degdeg_remaining = degdeg_distr.copy()
@@ -50,144 +51,41 @@ def make_graph(B, degdeg_distr, method_ext):
     edge_degs_list = HF.list_edge_degs(degdeg_remaining)
     if method == 'random_edge':
         pass
-    elif method == 'max_stub_min_deg':
-        def max_stub_min_deg_sort(item):
-            max_deg = item[_data]['deg']
-            curr_deg = B.degree(item[_node])
-            return (curr_deg - max_deg, max_deg)
-    elif method == 'total_edge_deg':
-        total_edge_sort = lambda x: - x[0] - x[1]
-        edge_degs_list = sorted(edge_degs_list, key=total_edge_sort)
-    elif method == 'max_edge_deg':
-        max_edge_sort = lambda x: (-max(x[0],x[1]), -x[0]-x[1])
-        edge_degs_list = sorted(edge_degs_list, key=max_edge_sort)
-    elif method == 'high_deg_node':
-        node_deg_sort = lambda x: -max_deg(x)
-        nodes_sorted = sorted(B.nodes(data=True), key=node_deg_sort)
-        top_nodes = [n for n in nodes_sorted if node_deg_sort(n) == node_deg_sort(nodes_sorted[0])]
-        top_node = HF.choose(top_nodes)
-        nodes_sorted.remove(top_node)
+    
     else:
         return ("Not a valid method -- {}".format(method), B)
-
+    
     for edge_i in xrange(n_edges):
         edge_found = False
         # Pick an edge
         impossibles = []
-        if method == 'high_deg_node':
-            if curr_deg(top_node) >= max_deg(top_node):
-                nodes_sorted = [n for n in nodes_sorted if curr_deg(n) < max_deg(n)]
-                top_nodes = [n for n in nodes_sorted if node_deg_sort(n) == node_deg_sort(nodes_sorted[0])]
-                top_node = HF.choose(top_nodes)
-                nodes_sorted.remove(top_node)
-
-            tdeg = max_deg(top_node)
-
-            possibles = []
-            if HF.is_upper(top_node):
-                for low in lower_nodes:
-                    if curr_deg(low) >= max_deg(low):
-                        continue
-                    if degdeg_remaining[tdeg-1,max_deg(low)-1] <= 0:
-                        continue
-                    if not is_neighbor(low, top_node):
-                        possibles.append(low)
-                    else:
-                        impossibles.append((top_node,low))
-                if len(possibles) > 0:
-                    edge_found = True
-                    (upper,lower) = (top_node,HF.choose(possibles))
-                    edge = (tdeg,max_deg(lower))
-            else:
-                for upp in upper_nodes:
-                    if curr_deg(upp) >= max_deg(upp):
-                        continue
-                    if degdeg_remaining[max_deg(upp)-1,tdeg-1] <= 0:
-                        continue
-                    if not is_neighbor(upp, top_node):
-                        possibles.append(upp)
-                    else:
-                        impossibles.append((upp,top_node))
-                if len(possibles) > 0:
-                    edge_found = True
-                    (upper,lower) = (HF.choose(possibles),top_node)
-                    edge = (max_deg(upper),tdeg)
-
-        elif method == 'max_stub_min_deg':
-            # Pick upper node
-            possible_nodes = next_most_free(B.nodes(data=True))
-            pnode = HF.choose(possible_nodes)
-
-            if HF.is_upper(pnode):
-                degs = degdeg_remaining[max_deg(pnode)-1].A1
-                other_nodes = lower_nodes
-            else:
-                ddr = np.transpose(degdeg_remaining)
-                degs = ddr[max_deg(pnode)-1].A1
-                other_nodes = upper_nodes
-
-            possible_edges = [(i+1, degs[i]) for i in xrange(0,len(degs)) if degs[i] > 0]
-            desired_edges = copy.copy(possible_edges)
-
-            impossibles = []
-            for _ in xrange(0, len(possible_edges)):
-                entry = HF.weighted_choice(desired_edges, 1)
-                # Pick other node
-                remaining_nodes = []
-                for onode in other_nodes:
-                    if max_deg(onode) == entry[0] and curr_deg(onode) < max_deg(onode):
-                        if not is_neighbor(onode, pnode):
-                            remaining_nodes.append(onode)
-                        else:
-                            if HF.is_upper(pnode):
-                                impossibles.append((pnode, onode))
-                            else:
-                                impossibles.append((onode, pnode))
-
-                if len(remaining_nodes) == 0:
-                    desired_edges.remove(entry)
-                    continue
-
-                pnode_ = HF.choose(remaining_nodes)
-                if HF.is_upper(pnode):
-                    (upper,lower) = (pnode,pnode_)
-                else:
-                    (upper,lower) = (pnode_,pnode)
-                edge = (max_deg(upper),max_deg(lower))
-                edge_found = True
-                break
-        else:
-            if method == 'random_edge':
-                edge = HF.choose_and_remove(edge_degs_list)
-
-            elif method == 'total_edge_deg':
-                idx = 0
-                sval = total_edge_sort (edge_degs_list[idx])
-                for i in xrange(1,len(edge_degs_list)):
-                    if sval == total_edge_sort (edge_degs_list[i]):
-                        idx = idx + 1
-                    else:
-                        break
-                edge = edge_degs_list.pop(np.random.randint(0,idx+1))
-
-            elif method == 'max_edge_deg':
-                edge = HF.choose_and_remove_with_rank(edge_degs_list, max_edge_sort)
-
+        
+        if method == 'random_edge':
+            edge = HF.choose_and_remove(edge_degs_list)
+            
             upper_options = [n for n in upper_nodes if max_deg(n) == edge[0] and curr_deg(n) < max_deg(n)]
             lower_options = [n for n in lower_nodes if max_deg(n) == edge[1] and curr_deg(n) < max_deg(n)]
 
             possibles = []
-            for upp in upper_options:
-                for low in lower_options:
-                    possible_edge = (upp,low)
-                    if is_neighbor(upp, low):
-                        impossibles.append(possible_edge)
-                    else:
-                        possibles.append(possible_edge)
+            m=0
+            k=3
+            while m==0 :
+                
+                for upp in upper_options:
+                    for low in lower_options:
+                        if len(nx.shortest_path(G,source=upp,target=low))-1==k:#added by soodeh
+                           possible_edge = (upp,low)
+                        if is_neighbor(upp, low):
+                           impossibles.append(possible_edge)
+                        else:
+                           possibles.append(possible_edge)
 
-            if len(possibles) > 0:
-                (upper,lower) = HF.choose(possibles)
-                edge_found = True
+                if len(possibles) > 0:
+                   (upper,lower) = HF.choose(possibles)
+                   edge_found = True
+                   m=1
+                k=k+2   
+                   
 
         if not edge_found:
             if len(impossibles) <= 0:
@@ -293,6 +191,7 @@ def make_graph(B, degdeg_distr, method_ext):
         return ("Table not comparable to graph, {}: ndouble {}".format(nz,len(double_edges)), B)
 
     return B
+
 
 
 

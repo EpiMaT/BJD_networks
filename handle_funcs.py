@@ -118,6 +118,7 @@ def compare_graph_to_table(G, table, dual_check):
 
     for edge in G.edges():
         (node1, node2) = edge
+
         if dual_check and G.number_of_edges(node1, node2) > 1:
             # print G.edges()
             return -1, test_mat
@@ -126,9 +127,10 @@ def compare_graph_to_table(G, table, dual_check):
         n2degi = G.degree(node2)-1
 
         if G.node[node1]['bipartite'] == 0:
-            test_mat[(n1degi,n2degi)] = test_mat[n1degi,n2degi] - 1
+            test_mat[n1degi,n2degi] = test_mat[n1degi,n2degi] - 1
         else:
             test_mat[n2degi,n1degi] = test_mat[n2degi,n1degi] - 1
+
     # print test_mat
     nz = np.count_nonzero(test_mat)
     return nz, test_mat

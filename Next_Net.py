@@ -11,16 +11,12 @@ _data = 1
 _upper = 0
 _lower = 1
 
-'''
-B=empty grapg to be made,
-degdeg_distr= BJD table,
-method_ext=method tomake grapg,
-B_old=Previous Grapg to choose partner from
-'''
-def make_graph(degdeg_distr, method_ext,B_old):
+
+def make_graph(B,degdeg_distr, method_ext,B_old):
     """Take an empty Graph, B, a BJD matrix and a desired method of generation"""
-    M=HF.max_shortest_path(B_old)
-    
+    number_of_nodes = len(B_old)
+   
+
     def max_deg(nodedata):
         return nodedata[_data]['deg']
 
@@ -30,17 +26,15 @@ def make_graph(degdeg_distr, method_ext,B_old):
     def is_neighbor(n1, n2):
         return n1[_node] in B.neighbors(n2[_node])
 
+    
+
     n_edges = degdeg_distr.sum()
     degdeg_remaining = degdeg_distr.copy()
 
-
-    B=B_old.copy()
-    for e in B.edges():
-        B.remove_edge(*e) 
     # Fill graph with nodes
-    #HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
-    #HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
-    
+    HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
+    HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
+
     upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
     lower_nodes = [n for n in B.nodes(data=True) if HF.is_lower(n)]
 
@@ -55,43 +49,72 @@ def make_graph(degdeg_distr, method_ext,B_old):
     edge_degs_list = HF.list_edge_degs(degdeg_remaining)
     if method == 'random_edge':
         pass
-    
     else:
         return ("Not a valid method -- {}".format(method), B)
-    
+
     for edge_i in xrange(n_edges):
         edge_found = False
         # Pick an edge
         impossibles = []
-        
-        if method == 'random_edge':
-            edge = HF.choose_and_remove(edge_degs_list)
-            
+        if method == 'random_edge1':
+            return ("Not a valid method method")
+        else:
+            if method == 'random_edge':
+                edge = HF.choose_and_remove(edge_degs_list)
+
             upper_options = [n for n in upper_nodes if max_deg(n) == edge[0] and curr_deg(n) < max_deg(n)]
             lower_options = [n for n in lower_nodes if max_deg(n) == edge[1] and curr_deg(n) < max_deg(n)]
+            #==================REVISED RANDOM EDGE=============== 
+            
+            possibles_unsorted = []
 
+            for upp in upper_options:
+                for low in lower_options:
+                    possible_edge = (upp, low)
+                    if is_neighbor(upp, low):
+                        impossibles.append(possible_edge)
+                    else:
+                       if nx.has_path(B_old, upp[_node], low[_node]):
+                           path_len = nx.shortest_path_length(B_old, source=upp[_node], target=low[_node])
+                           if path_len == 1:
+                              path_len=number_of_nodes+1
+                       else:
+                           path_len = number_of_nodes+1
+
+                       possibles_unsorted.append((possible_edge, path_len))
+                        
+            
+            if len(possibles_unsorted) > 0:
+                possibles = sorted(possibles_unsorted, key=lambda tup: tup[1])
+
+                first = possibles[0]
+                new_possibles = []
+                for entry in possibles:
+                   if entry[1] == first[1]:
+                        new_possibles.append(entry[0])
+                   else:
+                       break
+                (upper,lower) = HF.choose(new_possibles)
+                edge_found = True
+            
+           
+        #==================ORIGINAL RANDOM EDGE=============== 
+        '''
             possibles = []
-            m=0
-            k=3
-            while m==0 & k<=M:
-                
-                for upp in upper_options:
-                    for low in lower_options:
-                        if HF.path_exists(B_old,upp,low):
-                           if len(nx.shortest_path(B_old,source=upp,target=low))-1==k:
-                              possible_edge = (upp,low)
-                        if is_neighbor(upp, low):
-                           impossibles.append(possible_edge)
-                        else:
-                           possibles.append(possible_edge)
+            for upp in upper_options:
+                for low in lower_options:
+                    possible_edge = (upp,low)
+                    if is_neighbor(upp, low):
+                        impossibles.append(possible_edge)
+                    else:
+                        possibles.append(possible_edge)
 
-                if len(possibles) > 0:
-                   (upper,lower) = HF.choose(possibles)
-                   edge_found = True
-                   m=1
-                k=k+2   
-                   
-
+            if len(possibles) > 0:
+                (upper,lower) = HF.choose(possibles)
+                edge_found = True
+            #print upper    
+         '''     
+        #=================================        
         if not edge_found:
             if len(impossibles) <= 0:
                 return ("Major error -- {}".format(edge_i), B)
@@ -196,7 +219,6 @@ def make_graph(degdeg_distr, method_ext,B_old):
         return ("Table not comparable to graph, {}: ndouble {}".format(nz,len(double_edges)), B)
 
     return B
-
 
 
 

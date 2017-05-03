@@ -1,6 +1,18 @@
 import BJD
 import networkx as nx
 import numpy as np
+#!/usr/bin/python
+from networkx import *
+from random import *
+from networkx.algorithms import bipartite
+from pylab import show
+import numpy as np
+import os
+import re
+import matplotlib.pyplot as plt
+import networkx as nx
+#import statistics
+
 import graphs as g
 import Fix
 import Generate_Network as GN
@@ -43,7 +55,7 @@ if isinstance(B_new, tuple):
 else:
     print('')
 
-#print B_new.edges()
+#==============ANALYSING TWO NETWORKS
 a=[]
 for i in B_new.nodes():
     for j in B_new.neighbors(i):
@@ -53,3 +65,25 @@ for i in B_new.nodes():
           a.append(0)
 print 'far=', a.count(0)/float(len(a))          
 print 'close=', a.count(3)/float(len(a))           
+
+
+Bcc_old=sorted(nx.connected_component_subgraphs(B_old), key = len, reverse=True)
+B0_old=Bcc_old[0]
+nc_old=nx.number_connected_components(B_old)
+sg_old=append(B0_old.order())
+cl_old=bipartite.average_clustering(B_old)
+nodeb2_old=[i for i in B_old.nodes() if B_old.degree(i)>1]
+rc_old=bipartite.node_redundancy(B_old,nodes=nodeb2)
+    
+Bcc_new=sorted(nx.connected_component_subgraphs(B_new), key = len, reverse=True)
+B0_new=Bcc_new[0]
+nc_new=nx.number_connected_components(B_new)
+sg_new=append(B0_new.order())
+cl_new=bipartite.average_clustering(B_new)
+nodeb2_new=[i for i in B_new.nodes() if B_new.degree(i)>1]
+rc_new=bipartite.node_redundancy(B_new,nodes=nodeb2)
+        
+print 'diff number of connected components',nc_old-nc_new
+print 'diff size of giant component',sg_old-sg_new
+print 'diff clustering coefficinet',cl_old-cl_new
+print 'diff redindency coefficient', rc_old-rc_new

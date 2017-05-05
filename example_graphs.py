@@ -3,7 +3,7 @@ import numpy as np
 
 casual = np.matrix([[1, 1, 2],
                     [0, 3, 1]])
-                   
+
 small = np.matrix([[2, 2],
                    [2, 0]])
 

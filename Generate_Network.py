@@ -3,6 +3,13 @@ import numpy as np
 import copy
 import handle_funcs as HF
 # import cProfile
+try:
+    xrange
+except NameError:
+    print("Running in Python 3")
+    xrange = range
+else:
+    print("Running in Python 2")
 
 
 _node = 0
@@ -11,23 +18,26 @@ _data = 1
 _upper = 0
 _lower = 1
 
+def wants_to_rewire(method):
+    return method[-5:] == "_NORW":
+
+def max_deg(nodedata):
+    return nodedata[_data]['deg']
+
+def curr_deg(nodedata):
+    return B.degree(nodedata[_node])
+
+def is_neighbor(n1, n2):
+    return n1[_node] in B.neighbors(n2[_node])
+
+def next_most_free(list):
+    """Sort nodes first ascending curr-max degree, then descending max degree"""
+    sorted_list = sorted(list, key=max_stub_min_deg_sort)
+    return [n for n in sorted_list if max_stub_min_deg_sort(n) == max_stub_min_deg_sort(sorted_list[0])]
+
 
 def make_graph(B, degdeg_distr, method_ext):
     """Take an empty Graph, B, a BJD matrix and a desired method of generation"""
-
-    def max_deg(nodedata):
-        return nodedata[_data]['deg']
-
-    def curr_deg(nodedata):
-        return B.degree(nodedata[_node])
-
-    def is_neighbor(n1, n2):
-        return n1[_node] in B.neighbors(n2[_node])
-
-    def next_most_free(list):
-        """Sort nodes first ascending curr-max degree, then descending max degree"""
-        sorted_list = sorted(list, key=max_stub_min_deg_sort)
-        return [n for n in sorted_list if max_stub_min_deg_sort(n) == max_stub_min_deg_sort(sorted_list[0])]
 
     n_edges = degdeg_distr.sum()
     degdeg_remaining = degdeg_distr.copy()
@@ -41,7 +51,8 @@ def make_graph(B, degdeg_distr, method_ext):
 
     double_edges = []
     # Fill graph with edges
-    if method_ext[-5:] == "_NORW":
+
+    if wants_to_rewire(method_ext):
         method = method_ext[0:-5]
     else:
         method = method_ext
@@ -204,7 +215,7 @@ def make_graph(B, degdeg_distr, method_ext):
     if nz != 0:
         return ("Failed to make valid graph (allowing multiple edges).", B)
 
-    if method_ext[-5:] == "_NORW":
+    if wants_to_rewire(method_ext):
         if len(double_edges) > 0:
             return ("Needed to rewire", B)
         else:
@@ -259,8 +270,8 @@ def make_graph(B, degdeg_distr, method_ext):
                         alternateUV.append((u_prime,l_prime,l_others,u_others))
 
         if len(alternateUV) <= 0:
-            print B.edges()
-            print upper, lower, B.edges()
+            print(B.edges())
+            print(upper, lower, B.edges())
             return ("Cannot rewire.", B)
 
         tup = HF.choose(alternateUV)
@@ -293,9 +304,3 @@ def make_graph(B, degdeg_distr, method_ext):
         return ("Table not comparable to graph, {}: ndouble {}".format(nz,len(double_edges)), B)
 
     return B
-
-
-
-
-
-

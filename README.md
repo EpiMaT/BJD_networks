@@ -12,7 +12,8 @@
 
     get the BJD matrix and generate a bipartite network using one of the methods: max_stub_min_degree, random_edge and ...
 
-
+* **Generate_Aged_networks**
+   generate aged network using random edge algorithm.
 
 * **graphs**
 

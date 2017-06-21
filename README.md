@@ -12,9 +12,7 @@
 
     get the BJD matrix and generate a bipartite network using one of the methods: max_stub_min_degree, random_edge and ...
 
-* **Fix**
 
-    get a bipartite network and find its sub_network of main partnerships
 
 * **graphs**
 
@@ -23,3 +21,7 @@
 * **rewire_to_keep_main**
 
     get a network and rewire it to make main partnership
+
+***find_primary_ppartner***
+
+     after generating aged network select primary partner for only men

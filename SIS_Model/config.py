@@ -15,4 +15,4 @@ time_lag_test_treat = 2
 time_lag_partner_treatment = 2
 time_lag_rescreening = 100
 n_simulation = 10
-t_simulation = 100000
+t_simulation = 1000

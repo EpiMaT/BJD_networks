@@ -13,12 +13,16 @@ _lower = 1
 
 
 
-def sub(G):
-    Sub_G=G.copy()
-    m_list= [n[_node] for n in G.nodes(data=True) if HF.is_lower(n)]#list of men
-    print(m_list)
-    for i in Sub_G.nodes():
-        Sub_G.node[i]['primary_partner']=i     
+def primary_edge(B):
+    m_list= [n[_node] for n in B.nodes(data=True) if HF.is_lower(n)]#list of men
+    for man in m_list:
+        B.node[man[_node]]['primary partner'] = man[_node] 
+        deg_neigbor=[B.degree(j) for j in B.neighbors(man[_node])]
+        deg_min=min(deg_neigbor)
+        
+        
+        age_diff = [abs(man[_data]['age'] - n2[_data]['age'] ) for n2 in edge_ls]
+        B.node[i]['primary_partner']=random.sample([j for j  in G.neighbors(i) if G.degree(j)==deg_min],1)[0]   
     for i in m_list:
         deg_neigbor=[G.degree(j) for j in G.neighbors(i)]
         deg_min=min(deg_neigbor)

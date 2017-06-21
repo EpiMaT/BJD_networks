@@ -1,7 +1,7 @@
 import numpy as np
-<<<<<<< HEAD
+
 import networkx as nx
-=======
+
 import functools
 
 try:
@@ -11,7 +11,7 @@ except NameError:
     xrange = range
 else:
     print("Running in Python 2")
->>>>>>> origin/master
+
 
 _node = 0
 _data = 1
@@ -107,6 +107,60 @@ def choose(ls):
     i = np.random.randint(0,len(ls))
     return ls[i]
 
+def choose_age(edge_ls):
+        L=[-1,0,1,2]
+        weight=[]
+        choice=[]
+        age_diff = [w[_data]['age'] - m[_data]['age']  for w, m in edge_ls]
+        if -1 in age_diff:
+           weight.append(0.125)
+           choice.append(-1)
+        if 0 in age_diff:
+           weight.append(0.125)
+           choice.append(0)   
+        if 1 in age_diff:  
+            weight.append(0.125)
+            choice.append(1)
+        if 2 in age_diff:  
+            weight.append(0.125)
+            choice.append(2)
+        if not all(p <=2 and p>=-1 for p in age_diff):
+            weight.append(0.5)
+            choice.append('*')   
+        normed_weight = [float(i)/sum(weight) for i in weight]    
+        selection=np.random.choice(choice,p=normed_weight)
+        if selection =='*':
+            idx_list=[idx for idx, diff in enumerate(age_diff) if diff>2 or diff<-1] 
+        else:
+            idx_list=[idx for idx, diff in enumerate(age_diff) if diff==int(selection)] 
+             
+        return edge_ls[np.random.choice(idx_list)]  
+'''          
+def choose_age(edge_ls):
+        weight=[]
+        choice=[]
+        age_diff = [abs(n1[_data]['age'] - n2[_data]['age'] ) for n1, n2 in edge_ls]
+        if 0 in age_diff:
+           weight.append(0.5)
+           choice.append(0)
+        if 1 in age_diff:  
+            weight.append(0.2)
+            choice.append(1)
+        if 2 in age_diff:  
+            weight.append(0.2)
+            choice.append(2)
+        if not all(p <=2 for p in age_diff):
+            weight.append(0.1)
+            choice.append('*')    
+        normed_weight = [float(i)/sum(weight) for i in weight]    
+        selection=np.random.choice(choice,p=normed_weight)
+        if selection =='*':
+            idx_list=[idx for idx, diff in enumerate(age_diff) if diff>2] 
+        else:
+            idx_list=[idx for idx, diff in enumerate(age_diff) if diff==int(selection)] 
+             
+        return edge_ls[np.random.choice(idx_list)]
+'''        
 def choose_and_remove(ls):
     i = np.random.randint(0,len(ls))
     return ls.pop(i)
@@ -164,7 +218,7 @@ def list_edge_degs(degdeg_distr):
             for k in xrange(0,degdeg_distr[i,j]):
                 edges.append((i+1,j+1))
     return edges
-<<<<<<< HEAD
+
     
 def max_shortest_path(G):
     a=[]
@@ -177,5 +231,4 @@ def path_exists(G,source,target):
     for path in nx.all_simple_paths(G,source,target):
         return True  #if it finds one, it returns True, and gets out of the function.  It doesn't look for the next.
     return False  #if it didn't find one, it gets out of the function.    
-=======
->>>>>>> origin/master
+

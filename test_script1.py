@@ -2,18 +2,17 @@ import BJD
 import networkx as nx
 import numpy as np
 #!/usr/bin/python
-from networkx import *
+
 from random import *
 from networkx.algorithms import bipartite
 from pylab import show
-import numpy as np
-import networkx as nx
+import matplotlib.pyplot as plt
+
 #import statistics
 import Generate_Aged_Network as GAN
-import find_primary_partners as FPP
 
 import graphs as g
-
+import Fix
 #import Generate_Network as GN
 import handle_funcs as HF
 import Next_Net as NN
@@ -21,9 +20,9 @@ import Next_Net as NN
 
 reload(HF)
 reload(NN)
+reload(Fix)
 reload(BJD)
 reload(g)
-reload(FPP)
 reload(GAN)
 #reload(Generate_Network)
 
@@ -37,40 +36,35 @@ reload(GAN)
 #print(np.transpose(ddtable))
 #print(BJD.validate(ddtable))
 
-##B=GAN.make_graph(nx.Graph(),g.test_5000,'random_edge')
-
-#B1=FPP.primary_edges(B)
-
-
-#nx.write_gml(B1,'/Users/asma11/Desktop/BJD_networks/data/nola5000.gml')
-B=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/nola5000.gml') 
-'''
+B=GAN.make_graph(nx.Graph(),g.small,'random_edge')
+nx.write_gml(B,'/Users/asma11/Desktop/BJD_networks/data/small.gml')
+B=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/small.gml') 
 for i in  B.nodes():
-    print(i,B.node[i]['primarypartner'],B.node[i]['age'])
     for j in B.neighbors(i):
-        print(j,B.node[j]['age'],B.node[j]['deg'] )
-      
-    print('================')
-print(len(B.nodes())) 
-'''   
-   
-A= [ [  ] for x in range( 11) ]
-for age in range(15,25):
-   for i in  B.nodes():
-      if B.node[i]['age']==age:
-        for j in B.neighbors(i):
-           # print(B.node[i]['age'],B.node[j]['age'])
-              A[age-15].append(B.node[j]['age'])
+              print(B.node[i]['age'],B.node[j]['age'])
+    print('=============')             
+#A= [ [  ] for x in range( 19) ]
+#for age in range(11,31):
+ #   for i in  B.nodes():
+  #     if B.node[i]['age']==age:
+   #       for j in B.neighbors(i):
+    #          print(B.node[i]['age'],B.node[j]['age'])
+              #A[age-11].append(B.node[j]['age'])
                  
-fig = plt.figure(1, figsize=(9, 11))
-ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=True)
-ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
-plt.title('with age restriction')
 
-plt.show()
     
 #print(A)
+
+'''
+fig = plt.figure(1, figsize=(9, 19))
+ax = fig.add_subplot(111)    
+bp = ax.boxplot(A, showmeans=True)
+ax.set_xticklabels(['11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'])
+plt.title('without age restriction')
+#plt.xlim(10, 30)
+plt.show()
+'''
+
 '''
 B=GAN.make_graph(nx.Graph(),g.test_5000,'random_edge')
 if isinstance(B, tuple):

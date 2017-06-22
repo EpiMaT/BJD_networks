@@ -107,7 +107,7 @@ def choose(ls):
     i = np.random.randint(0,len(ls))
     return ls[i]
 
-def choose_age(edge_ls):
+def choose_age1(edge_ls):
         L=[-1,0,1,2]
         weight=[]
         choice=[]
@@ -135,7 +135,7 @@ def choose_age(edge_ls):
             idx_list=[idx for idx, diff in enumerate(age_diff) if diff==int(selection)] 
              
         return edge_ls[np.random.choice(idx_list)]  
-'''          
+         
 def choose_age(edge_ls):
         weight=[]
         choice=[]
@@ -160,7 +160,7 @@ def choose_age(edge_ls):
             idx_list=[idx for idx, diff in enumerate(age_diff) if diff==int(selection)] 
              
         return edge_ls[np.random.choice(idx_list)]
-'''        
+       
 def choose_and_remove(ls):
     i = np.random.randint(0,len(ls))
     return ls.pop(i)

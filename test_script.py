@@ -17,24 +17,27 @@ import graphs as g
 #import Generate_Network as GN
 import handle_funcs as HF
 import Next_Aged_Net as NAN
+import Next_Net as NN
 
 
 reload(HF)
 reload(NAN)
+reload(NN)
 reload(BJD)
 reload(g)
 reload(FPP)
 reload(GAN)
 
 
-#B=GAN.make_graph(nx.Graph(),g.malaria,'random_edge')
-#B_old=FPP.primary_edges(B)
-#nx.write_gml(B_old,'/Users/aazizibo/Desktop/BJD_networks/data/old_malaria_net.gml')
-B_old=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/nola5000.gml') 
-B_new=NAN.make_graph(nx.Graph(),g.malaria,'random_edge',B_old)
-nx.write_gml(B_old,'/Users/aazizibo/Desktop/BJD_networks/data/new_nola5000.gml')
-B_new=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/new_nola5000.gml')
+B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')
+B_old=FPP.primary_edges(B)
+nx.write_gml(B_old,'/Users/aazizibo/Desktop/BJD_networks/data/R1.gml')
+B_old=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/R1.gml') 
+B_new=NAN.make_graph(nx.Graph(),g.romance,'random_edge',B_old)
+nx.write_gml(B_new,'/Users/aazizibo/Desktop/BJD_networks/data/R2.gml')
+B_new=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/R2.gml')
 #==============ANALYSING TWO NETWORKS
+
 a=[]
 for i in B_new.nodes():
     for j in B_new.neighbors(i):

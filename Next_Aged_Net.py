@@ -12,10 +12,12 @@ _upper = 0
 _lower = 1
 
 
-def make_graph(B,degdeg_distr, method_ext,B_old):
+def make_graph(degdeg_distr, method_ext,B_old):
     """Take an empty Graph, B, a BJD matrix and a desired method of generation"""
     number_of_nodes = len(B_old)
-    
+    B=B_old.copy()
+    for e in B.edges():
+        B.remove_edge(*e)
 
     def max_deg(nodedata):
         return nodedata[_data]['deg']
@@ -32,8 +34,8 @@ def make_graph(B,degdeg_distr, method_ext,B_old):
     degdeg_remaining = degdeg_distr.copy()
 
     # Fill graph with nodes
-    HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
-    HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
+    #HF.add_upper_nodes(B, HF.upper_deg_distr(degdeg_remaining))
+    #HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
 
     upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
     #for entry in upper_nodes:
@@ -100,7 +102,7 @@ def make_graph(B,degdeg_distr, method_ext,B_old):
                         new_possibles.append(entry[0])
                    else:
                        break
-                (upper,lower) = HF.choose(new_possibles)
+                (upper,lower) = HF.choose_age(new_possibles)
                 edge_found = True
             
            

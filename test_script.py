@@ -33,7 +33,7 @@ B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')
 B_old=FPP.primary_edges(B)
 nx.write_gml(B_old,'/Users/aazizibo/Desktop/BJD_networks/data/R1.gml')
 B_old=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/R1.gml') 
-B_new=NAN.make_graph(nx.Graph(),g.romance,'random_edge',B_old)
+B_new=NAN.make_graph(g.romance,'random_edge',B_old)
 nx.write_gml(B_new,'/Users/aazizibo/Desktop/BJD_networks/data/R2.gml')
 B_new=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/R2.gml')
 #==============ANALYSING TWO NETWORKS

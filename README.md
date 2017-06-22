@@ -15,6 +15,11 @@
 * **Generate_Aged_networks**
    generate aged network using random edge algorithm.
 
+
+***Next_Net****
+
+    takes the old network and try to re-partner people from the people with the minimum distance.
+    
 * **graphs**
 
     defines several BJD matrix as inputs

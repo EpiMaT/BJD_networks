@@ -36,7 +36,13 @@ def make_graph(B,degdeg_distr, method_ext,B_old):
     HF.add_lower_nodes(B, HF.lower_deg_distr(degdeg_remaining))
 
     upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
+    for entry in upper_nodes:
+        B.node[entry[_node]]['age']=B_old.node[entry[_node]]['age']#age distribution of women
+        B.node[entry[_node]]['primarypartner']=B_old.node[entry[_node]]['primarypartner']
     lower_nodes = [n for n in B.nodes(data=True) if HF.is_lower(n)]
+    for entry in lower_nodes:
+        B.node[entry[_node]]['age']=B_old.node[entry[_node]]['age']#age distribution of women
+        B.node[entry[_node]]['primarypartner']=B_old.node[entry[_node]]['primarypartner']
 
     double_edges = []
     # Fill graph with edges

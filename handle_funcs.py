@@ -135,6 +135,9 @@ def choose_age(edge_ls):
             idx_list=[idx for idx, diff in enumerate(age_diff) if diff==int(selection)] 
              
         return edge_ls[np.random.choice(idx_list)]  
+
+def diff_age(i,j):
+    return abs(i[_data]['age'] - j[_data]['age'])
 '''         
 def choose_age(edge_ls):
         weight=[]

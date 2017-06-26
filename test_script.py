@@ -19,15 +19,12 @@ import graphs as g
 import handle_funcs as HF
 import Next_Aged_Net as NAN
 import Next_Net as NN
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import time
-=======
-=======
->>>>>>> origin/master
+
 import rewire_2_keep_primary_partners as RKPP
 
->>>>>>> origin/master
+
 
 reload(HF)
 reload(NAN)
@@ -66,8 +63,6 @@ plt.xlabel('age of men')
 plt.ylabel('age of their partners')
 plt.show()
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 #B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')
 #B_old=FPP.primary_edges(B)
@@ -79,10 +74,7 @@ nx.write_gml(B_new,'/Users/asma11/Desktop/BJD_networks/data/nola2.gml')
 t2=time.time()
 print("------%s seconds to generate next net---" % (t2-t1))
 B_new=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/nola2.gml')
-=======
->>>>>>> origin/master
-=======
->>>>>>> origin/master
+
 #==============ANALYSING TWO NETWORKS
 '''
 a=[]

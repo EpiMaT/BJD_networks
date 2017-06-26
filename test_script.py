@@ -44,7 +44,10 @@ NB=RKPP.rewire(OB,NB0)
 nx.write_gml(NB,'/Users/aazizibo/Desktop/BJD_networks/data/NB_romance.gml')
 NB=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/NB_romance.gml')
 '''
-G=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/nola5000.gml')
+#G=GAN.make_graph(nx.Graph(),g.test_5000,'random_edge')#generate the first network
+#nx.write_gml(G,'/Users/asma11/Desktop/BJD_networks/data/NOLA5000.gml')
+
+G=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/NOLA5000.gml')
 men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
 A= [ [  ] for x in range( 11) ]
 for age in range(15,26):
@@ -63,7 +66,7 @@ plt.xlabel('age of men')
 plt.ylabel('age of their partners')
 plt.show()
 
-
+'''
 #B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')
 #B_old=FPP.primary_edges(B)
 #nx.write_gml(B_old,'/Users/aazizibo/Desktop/BJD_networks/data/R1.gml')
@@ -74,7 +77,7 @@ nx.write_gml(B_new,'/Users/asma11/Desktop/BJD_networks/data/nola2.gml')
 t2=time.time()
 print("------%s seconds to generate next net---" % (t2-t1))
 B_new=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/nola2.gml')
-
+'''
 #==============ANALYSING TWO NETWORKS
 '''
 a=[]

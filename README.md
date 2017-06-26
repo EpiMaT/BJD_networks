@@ -22,7 +22,10 @@
     
  ***Next_Aged_Net****
 
-    takes the old aged network and try to re-partner people from the people with the minimum distance.   
+    takes the old aged network and try to re-partner people from the people with the minimum distance.
+    
+    ***Rewire_2_keep_primary_partners****
+    takes the new next_aged_network and make its primary edges if it is not there.   
     
 * **graphs**
 

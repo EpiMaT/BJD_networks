@@ -46,7 +46,9 @@ def make_graph(B, degdeg_distr, method_ext):
 
     upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
     for entry in upper_nodes:
-        B.node[entry[_node]]['age']=np.random.binomial(31, 0.575919, 1)[0]#age distribution of women
+        age=np.random.binomial(124, 0.1738, 1)[0]
+        while age>=13:
+              B.node[entry[_node]]['age']=age#age distribution of women
         B.node[entry[_node]]['primarypartner']=entry[0]
     lower_nodes = [n for n in B.nodes(data=True) if HF.is_lower(n)]
     for entry in lower_nodes:

@@ -18,80 +18,32 @@ import graphs as g
 #import Generate_Network as GN
 import handle_funcs as HF
 import Next_Aged_Net as NAN
+import Next_Net as NN
+
 import time
-import Rewire_2_keep_Primary as RKP
+
+import rewire_2_keep_primary_partners as RKPP
 
 
 
 reload(HF)
 reload(NAN)
+reload(NN)
 reload(BJD)
 reload(g)
 reload(FPP)
 reload(GAN)
-reload(RKP)
-
-#==========first net=============#
-t1=time.time()
-B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
-B0=FPP.primary_edges(B)#define its primary partners
-nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
-B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
-t2=time.time()
-print("------%s seconds to generate  net---" % (t2-t1))
-# #==============6 months later===============
-B=NAN.make_graph(g.romance,'random_edge',B0)#generate the new  network 1 year later
-t3=time.time()
-print("------%s seconds to generate next net---" % (t3-t2))
-B1=RKP.rewire(B0,B)
-nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
-B1=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
-t4=time.time()
-print("------%s seconds to rewire net---" % (t4-t3))
-G=B0.copy()
-men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
-A= [ [  ] for x in range( 11) ]
-for age in range(15,26):
-   for i in  men:
-      if G.node[i]['age']==age:
-        for j in G.neighbors(i):
-           # print(B.node[i]['age'],B.node[j]['age'])
-              A[age-15].append(G.node[j]['age'])
-                 
-fig = plt.figure()
-ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=True)
-ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
-plt.title('before rewiring')
-plt.xlabel('age of men')
-plt.ylabel('age of their partners')
-plt.show()
-
-G=B1.copy()
-men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
-A= [ [  ] for x in range( 11) ]
-for age in range(15,26):
-   for i in  men:
-      if G.node[i]['age']==age:
-        for j in G.neighbors(i):
-           # print(B.node[i]['age'],B.node[j]['age'])
-              A[age-15].append(G.node[j]['age'])
-                 
-fig = plt.figure()
-ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=True)
-ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
-plt.title('after rewiring')
-plt.xlabel('age of men')
-plt.ylabel('age of their partners')
-plt.show()
+reload(RKPP)
 '''
- 
+B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
+OB=FPP.primary_edges(B)#define its primary partners
+nx.write_gml(OB,'/Users/aazizibo/Desktop/BJD_networks/data/OB_romance.gml')
+OB=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/OB_romance.gml') 
 NB0=NAN.make_graph(g.romance,'random_edge',OB)#generate the new  network 1 year later
 NB=RKPP.rewire(OB,NB0)
 nx.write_gml(NB,'/Users/aazizibo/Desktop/BJD_networks/data/NB_romance.gml')
 NB=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/NB_romance.gml')
-
+'''
 #G=GAN.make_graph(nx.Graph(),g.test_5000,'random_edge')#generate the first network
 #nx.write_gml(G,'/Users/asma11/Desktop/BJD_networks/data/NOLA5000.gml')
 
@@ -107,14 +59,14 @@ for age in range(15,26):
                  
 fig = plt.figure(1, figsize=(9, 11))
 ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=False)
+bp = ax.boxplot(A, showmeans=True)
 ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
 plt.title('with age restriction')
 plt.xlabel('age of men')
 plt.ylabel('age of their partners')
 plt.show()
 
-
+'''
 #B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')
 #B_old=FPP.primary_edges(B)
 #nx.write_gml(B_old,'/Users/aazizibo/Desktop/BJD_networks/data/R1.gml')
@@ -125,9 +77,9 @@ nx.write_gml(B_new,'/Users/asma11/Desktop/BJD_networks/data/nola2.gml')
 t2=time.time()
 print("------%s seconds to generate next net---" % (t2-t1))
 B_new=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/nola2.gml')
-
+'''
 #==============ANALYSING TWO NETWORKS
-
+'''
 a=[]
 for i in B_new.nodes():
     for j in B_new.neighbors(i):
@@ -194,7 +146,8 @@ plt.show()
 
 
 #nx.write_gml(B1,'/Users/asma11/Desktop/BJD_networks/data/nola5000.gml')
-
+'''
+'''
 for i in  B.nodes():
     print(i,B.node[i]['primarypartner'],B.node[i]['age'])
     for j in B.neighbors(i):

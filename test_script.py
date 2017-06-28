@@ -32,22 +32,22 @@ reload(GAN)
 reload(RKP)
 
 #==========first net=============#
-# t1=time.time()
-# B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
-# B0=FPP.primary_edges(B)#define its primary partners
-# nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
+t1=time.time()
+B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
+B0=FPP.primary_edges(B)#define its primary partners
+nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
 B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
-# t2=time.time()
-# print("------%s seconds to generate  net---" % (t2-t1))
+t2=time.time()
+print("------%s seconds to generate  net---" % (t2-t1))
 # #==============6 months later===============
-# B=NAN.make_graph(g.romance,'random_edge',B0)#generate the new  network 1 year later
-# t3=time.time()
-# print("------%s seconds to generate next net---" % (t3-t2))
-# B1=RKP.rewire(B0,B)
-# nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
+B=NAN.make_graph(g.romance,'random_edge',B0)#generate the new  network 1 year later
+t3=time.time()
+print("------%s seconds to generate next net---" % (t3-t2))
+B1=RKP.rewire(B0,B)
+nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
 B1=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
-# t4=time.time()
-# print("------%s seconds to rewire net---" % (t4-t3))
+t4=time.time()
+print("------%s seconds to rewire net---" % (t4-t3))
 G=B0.copy()
 men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
 A= [ [  ] for x in range( 11) ]

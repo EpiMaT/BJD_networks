@@ -17,6 +17,8 @@ def rewire(G,NB):
     
     m_list= [n[0] for n in G.nodes(data=True) if HF.is_lower(n)]#list of men
     f_list= [n[0] for n in G.nodes(data=True) if HF.is_upper(n)]#list of women
+    age_ok=0
+    age_bad=0
     for i in m_list:
         j=G.node[i]['primarypartner']
         ai=G.node[i]['age']
@@ -34,8 +36,7 @@ def rewire(G,NB):
                         NB.add_edge(ip,jp)
                         NB.remove_edge(i,jp)
                         NB.remove_edge(ip,j)
-                        print(i,'model 1')
-                        print('=============')
+                        age_ok=age_ok+1
                         break
             elif  len([k for k  in NB.neighbors(j) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2])>0:
                   for l in [k for k  in NB.neighbors(j) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2]:
@@ -46,8 +47,7 @@ def rewire(G,NB):
                         NB.add_edge(ip,jp)
                         NB.remove_edge(i,jp)
                         NB.remove_edge(ip,j)
-                        print(i,'model 2')
-                        print('=============') 
+                        age_ok=age_ok+1 
                         break      
             elif len([k for k  in NB.neighbors(i) if NB.degree(k)==d2 if abs(ai-G.node[k]['age'])>2])==0 and len([k for k  in NB.neighbors(j) if NB.degree(k)==d1 if abs(aj-G.node[k]['age'])>2 ])==0: 
                  for l in [k for k  in m_list if k!=i and NB.degree(k)==d1]:
@@ -65,8 +65,7 @@ def rewire(G,NB):
                                 NB.remove_edge(ip,jp)
                                 NB.remove_edge(i,S1)
                                 NB.remove_edge(j,S2)
-                                print(i,'model 3')
-                                print('=============')
+                                age_ok=age_ok+1
                         break
             #=====================without age restriction========================#
             if len([k for k  in NB.neighbors(i) if NB.degree(k)==d2 ])>0: 
@@ -78,8 +77,7 @@ def rewire(G,NB):
                         NB.add_edge(ip,jp)
                         NB.remove_edge(i,jp)
                         NB.remove_edge(ip,j)
-                        print(i,'model 1p')
-                        print('=============')
+                        age_bad=age_bad+1
                         break
             elif  len([k for k  in NB.neighbors(j) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j])>0:
                   for l in [k for k  in NB.neighbors(j) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j]:
@@ -90,8 +88,7 @@ def rewire(G,NB):
                         NB.add_edge(ip,jp)
                         NB.remove_edge(i,jp)
                         NB.remove_edge(ip,j)
-                        print(i,'model 2p')
-                        print('=============') 
+                        age_bad=age_bad+1 
                         break      
             elif len([k for k  in NB.neighbors(i) if NB.degree(k)==d2])==0 and len([k for k  in NB.neighbors(j) if NB.degree(k)==d1])==0: 
                  for l in [k for k  in m_list if k!=i and NB.degree(k)==d1]:
@@ -108,15 +105,16 @@ def rewire(G,NB):
                                 NB.remove_edge(ip,jp)
                                 NB.remove_edge(i,S1)
                                 NB.remove_edge(j,S2)
-                                print(i,'model 3p')
-                                print('=============')
+                                age_bad=age_bad+1
                         break             
     k=0
     for i in m_list:
         j=G.node[i]['primarypartner']
         if j not  in NB.neighbors(i): 
            k=k+1
-    print('k=', k/float(len(m_list)))                 
+    print('k=', k/float(len(m_list))) 
+    print('age_ok ' ,age_ok)       
+    print('age_bad ' ,age_bad)         
     return NB 
      
      

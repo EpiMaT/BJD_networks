@@ -21,7 +21,7 @@ import Next_Aged_Net as NAN
 import time
 import Rewire_2_keep_Primary as RKP
 
-
+#import ewire_2_keep_Primary as RKP
 
 reload(HF)
 reload(NAN)
@@ -32,59 +32,66 @@ reload(GAN)
 reload(RKP)
 
 #==========first net=============#
-t1=time.time()
-B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
+# t1=time.time()
+B=GAN.make_graph(nx.Graph(),g.malaria,'random_edge')#generate the first network
 B0=FPP.primary_edges(B)#define its primary partners
-nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
-B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
-t2=time.time()
-print("------%s seconds to generate  net---" % (t2-t1))
-# #==============6 months later===============
-B=NAN.make_graph(g.romance,'random_edge',B0)#generate the new  network 1 year later
-t3=time.time()
-print("------%s seconds to generate next net---" % (t3-t2))
+nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_malaria.gml')
+B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_malaria.gml')
+# t2=time.time()
+# print("------%s seconds to generate  net---" % (t2-t1))
+# # #==============6 months later===============
+B=NAN.make_graph(g.malaria,'random_edge',B0)#generate the new  network 1 year later
+A=BJD.extract(B)
+A0=BJD.extract(B0)
+print('before rewire',np.subtract(A,A0))
+# t3=time.time()
+# print("------%s seconds to generate next net---" % (t3-t2))
 B1=RKP.rewire(B0,B)
-nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
-B1=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
-t4=time.time()
-print("------%s seconds to rewire net---" % (t4-t3))
-G=B0.copy()
-men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
-A= [ [  ] for x in range( 11) ]
-for age in range(15,26):
-   for i in  men:
-      if G.node[i]['age']==age:
-        for j in G.neighbors(i):
-           # print(B.node[i]['age'],B.node[j]['age'])
-              A[age-15].append(G.node[j]['age'])
-                 
-fig = plt.figure()
-ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=True)
-ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
-plt.title('before rewiring')
-plt.xlabel('age of men')
-plt.ylabel('age of their partners')
-plt.show()
+nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_malaria.gml')
+B1=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B1_malaria.gml')
+# t4=time.time()
+# print("------%s seconds to rewire net---" % (t4-t3))
 
-G=B1.copy()
-men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
-A= [ [  ] for x in range( 11) ]
-for age in range(15,26):
-   for i in  men:
-      if G.node[i]['age']==age:
-        for j in G.neighbors(i):
-           # print(B.node[i]['age'],B.node[j]['age'])
-              A[age-15].append(G.node[j]['age'])
-                 
-fig = plt.figure()
-ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=True)
-ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
-plt.title('after rewiring')
-plt.xlabel('age of men')
-plt.ylabel('age of their partners')
-plt.show()
+A=BJD.extract(B)
+A1=BJD.extract(B1)
+print('after rewire',np.subtract(A,A1))
+# G=B0.copy()
+# men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
+# A= [ [  ] for x in range( 11) ]
+# for age in range(15,26):
+#    for i in  men:
+#       if G.node[i]['age']==age:
+#         for j in G.neighbors(i):
+#            # print(B.node[i]['age'],B.node[j]['age'])
+#               A[age-15].append(G.node[j]['age'])
+#                  
+# fig = plt.figure()
+# ax = fig.add_subplot(111)    
+# bp = ax.boxplot(A, showmeans=True)
+# ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
+# plt.title('before rewiring')
+# plt.xlabel('age of men')
+# plt.ylabel('age of their partners')
+# plt.show()
+# 
+# G=B1.copy()
+# men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
+# A= [ [  ] for x in range( 11) ]
+# for age in range(15,26):
+#    for i in  men:
+#       if G.node[i]['age']==age:
+#         for j in G.neighbors(i):
+#            # print(B.node[i]['age'],B.node[j]['age'])
+#               A[age-15].append(G.node[j]['age'])
+#                  
+# fig = plt.figure()
+# ax = fig.add_subplot(111)    
+# bp = ax.boxplot(A, showmeans=True)
+# ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
+# plt.title('after rewiring')
+# plt.xlabel('age of men')
+# plt.ylabel('age of their partners')
+# plt.show()
 '''
  
 NB0=NAN.make_graph(g.romance,'random_edge',OB)#generate the new  network 1 year later

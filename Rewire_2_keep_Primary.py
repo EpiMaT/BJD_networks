@@ -28,8 +28,8 @@ def rewire(G,NB):
             if len([k for k  in NB.neighbors(i) if NB.degree(k)==d2 if abs(ai-G.node[k]['age'])>2])>0: #and len([k for k  in NB.neighbors(j) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2])>0:
                 for l in [k for k  in NB.neighbors(i) if NB.degree(k)==d2 if abs(ai-G.node[k]['age'])>2]:
                     jp=l
-                    if len([k for k  in NB.neighbors(j) and k not in NB.neighbors(jp)  if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2])>0:
-                        ip=random.sample([k for k  in NB.neighbors(j) and k not in NB.neighbors(jp) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2],1)[0]
+                    if len([k for k  in NB.neighbors(j) if k not in NB.neighbors(jp)  if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2])>0:
+                        ip=random.sample([k for k  in NB.neighbors(j) if k not in NB.neighbors(jp)  if G.node[k]['primarypartner']!=j if abs(aj-G.node[k]['age'])>2],1)[0]
                         NB.add_edge(i,j)
                         NB.add_edge(ip,jp)
                         NB.remove_edge(i,jp)
@@ -72,8 +72,8 @@ def rewire(G,NB):
             if len([k for k  in NB.neighbors(i) if NB.degree(k)==d2 ])>0: 
                 for l in [k for k  in NB.neighbors(i) if NB.degree(k)==d2]:
                     jp=l
-                    if len([k for k  in NB.neighbors(j) and k not in NB.neighbors(jp)  if G.node[k]['primarypartner']!=j ])>0:
-                        ip=random.sample([k for k  in NB.neighbors(j) and k not in NB.neighbors(jp) if NB.degree(k)==d1 if G.node[k]['primarypartner']!=j],1)[0]
+                    if len([k for k  in NB.neighbors(j) if k not in NB.neighbors(jp)  if G.node[k]['primarypartner']!=j ])>0:
+                        ip=random.sample([k for k  in NB.neighbors(j) if k not in NB.neighbors(jp)  if G.node[k]['primarypartner']!=j],1)[0]
                         NB.add_edge(i,j)
                         NB.add_edge(ip,jp)
                         NB.remove_edge(i,jp)
@@ -96,8 +96,8 @@ def rewire(G,NB):
             elif len([k for k  in NB.neighbors(i) if NB.degree(k)==d2])==0 and len([k for k  in NB.neighbors(j) if NB.degree(k)==d1])==0: 
                  for l in [k for k  in m_list if k!=i and NB.degree(k)==d1]:
                     ip=l
-                    if len([f for f  in f_list  if NB.degree(f)==d2 and f in NB.neighbors(ip) and f!=G.node[ip]['primarypartner']]) >0:
-                        jp=random.sample([f for f  in f_list  if NB.degree(f)==d2 and f in NB.neighbors(ip) and f!=G.node[ip]['primarypartner']],1)[0]             
+                    if len([f for f  in f_list  if NB.degree(f)==d2 if f in NB.neighbors(ip) if f!=G.node[ip]['primarypartner']]) >0:
+                        jp=random.sample([f for f  in f_list  if NB.degree(f)==d2 if f in NB.neighbors(ip) if f!=G.node[ip]['primarypartner']],1)[0]             
                         if len([f for f in NB.neighbors(i) if f not in NB.neighbors(ip)])>0:
                             S1=random.sample([f for f in NB.neighbors(i) if f not in NB.neighbors(ip)],1)[0]
                             if len([m for m in NB.neighbors(j) if m not in NB.neighbors(jp) and j!=G.node[m]['primarypartner']])>0:

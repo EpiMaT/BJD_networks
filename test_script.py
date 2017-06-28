@@ -33,22 +33,22 @@ reload(RKP)
 
 #==========first net=============#
 # t1=time.time()
-B=GAN.make_graph(nx.Graph(),g.malaria,'random_edge')#generate the first network
-B0=FPP.primary_edges(B)#define its primary partners
-nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_malaria.gml')
-B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_malaria.gml')
+# B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
+# B0=FPP.primary_edges(B)#define its primary partners
+# nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
+B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
 # t2=time.time()
 # print("------%s seconds to generate  net---" % (t2-t1))
 # # #==============6 months later===============
-B=NAN.make_graph(g.malaria,'random_edge',B0)#generate the new  network 1 year later
+B=NAN.make_graph(g.romance,'random_edge',B0)#generate the new  network 1 year later
 A=BJD.extract(B)
 A0=BJD.extract(B0)
 print('before rewire',np.subtract(A,A0))
 # t3=time.time()
 # print("------%s seconds to generate next net---" % (t3-t2))
 B1=RKP.rewire(B0,B)
-nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_malaria.gml')
-B1=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B1_malaria.gml')
+nx.write_gml(B1,'/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
+B1=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B1_romance.gml')
 # t4=time.time()
 # print("------%s seconds to rewire net---" % (t4-t3))
 

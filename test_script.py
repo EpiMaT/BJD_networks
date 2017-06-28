@@ -107,7 +107,7 @@ for age in range(15,26):
                  
 fig = plt.figure(1, figsize=(9, 11))
 ax = fig.add_subplot(111)    
-bp = ax.boxplot(A, showmeans=True)
+bp = ax.boxplot(A, showmeans=False)
 ax.set_xticklabels([ '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25'])
 plt.title('with age restriction')
 plt.xlabel('age of men')

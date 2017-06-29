@@ -46,6 +46,7 @@ def make_graph(B, degdeg_distr, method_ext):
 
     upper_nodes = [n for n in B.nodes(data=True) if HF.is_upper(n)]
     for entry in upper_nodes:
+        B.node[entry[_node]]['avg_contact']=HF.EW(B.node[entry[_data]]['deg'])
         testing=0
         while testing==0:
             age=np.random.binomial(124, 0.1738, 1)[0]
@@ -56,6 +57,10 @@ def make_graph(B, degdeg_distr, method_ext):
         B.node[entry[_node]]['primarypartner']=entry[0]
     lower_nodes = [n for n in B.nodes(data=True) if HF.is_lower(n)]
     for entry in lower_nodes:
+        partner_contact=[]
+        for p in B.neighbors(entry[0]):
+            partner_contact.append(HF.EW(B.node[entry[_data]]['deg']))
+        B.node[entry[_node]]['avg_contact'] = np.mean(partner_contact)    
         B.node[entry[_node]]['age']=np.random.choice([15,16,17,18,19,20,21,22,23,24,25],
                                          p=[0.035,0.035,0.04,0.15,0.15,0.13,0.115,0.105,0.11,0.07,0.06])#age distribution of men
         B.node[entry[_node]]['primarypartner']=entry[0]                          

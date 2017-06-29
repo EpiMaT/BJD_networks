@@ -88,14 +88,15 @@ plt.ylabel('age of their partners')
 plt.show()
 =======
 # t1=time.time()
-# B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
-# B0=FPP.primary_edges(B)#define its primary partners
-# nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
+B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
+nx.write_gml(B,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
+B0=FPP.primary_edges(B)#define its primary partners
+nx.write_gml(B0,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
 B0=nx.read_gml('/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
 # t2=time.time()
 # print("------%s seconds to generate  net---" % (t2-t1))
 # # #==============6 months later===============
-B=NAN.make_graph(g.romance,'random_edge',B0)#generate the new  network 1 year later
+B=NAN.make_graph(g.southern_women,'random_edge',B0)#generate the new  network 1 year later
 A=BJD.extract(B)
 A0=BJD.extract(B0)
 print('before rewire',np.subtract(A,A0))

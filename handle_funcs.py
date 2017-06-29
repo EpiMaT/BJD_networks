@@ -136,9 +136,7 @@ def choose_age(edge_ls):
              
         return edge_ls[np.random.choice(idx_list)]  
 
-def diff_age(edge_ls):
-    A=[abs(i[_data]['age'] - j[_data]['age']) for i, j in edge_ls]
-    return A[0] 
+ 
 '''         
 def choose_age(edge_ls):
         weight=[]
@@ -236,3 +234,16 @@ def path_exists(G,source,target):
         return True  #if it finds one, it returns True, and gets out of the function.  It doesn't look for the next.
     return False  #if it didn't find one, it gets out of the function.    
 
+def EW(d):#edge_weight based on degree of women
+    if d==1:
+        return 0.1104
+    elif d==2:
+        return 0.0563
+    elif d==3:
+        return 0.0442
+    elif d==4:
+        return 0.0241
+    elif d==5:
+        return 0.0503
+    else:
+        return 0.0222

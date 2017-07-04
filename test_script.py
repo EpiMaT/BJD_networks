@@ -52,7 +52,11 @@ nx.write_gml(B1,'/Users/asma11/Desktop/BJD_networks/data/B1_romance.gml')
 B1=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/B1_romance.gml')
 t4=time.time()
 print("------%s seconds to rewire net---" % (t4-t3))
+<<<<<<< HEAD
 
+=======
+'''
+>>>>>>> origin/master
 G=B0.copy()
 men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
 A= [ [  ] for x in range( 11) ]
@@ -91,6 +95,7 @@ plt.xlabel('age of men')
 plt.ylabel('age of their partners')
 plt.show()
 =======
+
 # t1=time.time()
 B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
 nx.write_gml(B,'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')

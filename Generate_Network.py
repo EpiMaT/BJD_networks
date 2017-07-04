@@ -19,7 +19,7 @@ _upper = 0
 _lower = 1
 
 def wants_to_rewire(method):
-    return method[-5:] == "_NORW":
+    return method[-5:] == "_NORW"
 
 def max_deg(nodedata):
     return nodedata[_data]['deg']

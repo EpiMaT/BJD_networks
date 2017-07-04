@@ -135,7 +135,9 @@ def one_sim(l):
         number_of_new_female[k]=len(new_female_list)
         #=========================START INTERVENTION======================#
         partner_of_ifct_male_list=[]
+        social_friend_of_ifct_male_list=[]####
         partner_of_ifct_female_list=[]
+        social_friend_of_ifct_female_list=[]####
         Partner_of_male_notified_list=[]
         Partner_of_female_notified_list=[]
         Treat_partner_of_male_list=[]
@@ -159,6 +161,21 @@ def one_sim(l):
             screened_ifct_male_list=random.sample(candidate_male,m1+1)
         else:
             screened_ifct_male_list=random.sample(candidate_male,m1) 
+            
+        #===================social friend of found ifct men====================== 
+        for   man in screened_ifct_male_list:
+              social_for_him=[]
+              p1=G.node[man]['avgcontact']
+              for woman in G.neighbors(man):
+                  for social_friend in  G.neighbors(woman):
+                      p2=G.node[social_friend]['avgcontact']
+                      k=len(nx.common_neighbors(G, man, social_friend))
+                      if pl.rand()< 1-(1-p1*p2)**k:
+                         social_for_him.append(social_friend)
+                         
+                         social_friend_of_ifct_male_list.append(social_friend)
+                          
+                      
         #===========================add contact tracing===========================    
         if k>=cfg.time_lag_test_treat:
            for i in Test_treat_matrix[k-cfg.time_lag_test_treat]:
@@ -170,6 +187,7 @@ def one_sim(l):
         for i in screened_ifct_male_list:
             partner_of_ifct_male_list.extend(G.neighbors(i))
         number_of_partners=len(partner_of_ifct_male_list)
+        
         #============================PARTNERS NOTIFIED=====================
         n=int(math.floor(cfg.partner_notification*number_of_partners))#size of partner notified and seek treating
         pts=(cfg.partner_notification*number_of_partners)-n

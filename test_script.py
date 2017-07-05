@@ -36,9 +36,9 @@ reload(RKP)
 
 #t1=time.time()
 B=GAN.make_graph(nx.Graph(),g.malaria,'random_edge')#generate the first network
-print B
+
 #B0=FPP.primary_edges(B)#define its primary partners
-nx.write_gml(B[1],'/Users/aazizibo/Desktop/BJD_networks/data/B0_romance.gml')
+nx.write_gml(B[1],'/Users/asma11/Desktop/BJD_networks/data/B0_romance.gml')
 B0=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/B0_romance.gml')
 '''
 t2=time.time()
@@ -52,11 +52,11 @@ nx.write_gml(B1,'/Users/asma11/Desktop/BJD_networks/data/B1_romance.gml')
 B1=nx.read_gml('/Users/asma11/Desktop/BJD_networks/data/B1_romance.gml')
 t4=time.time()
 print("------%s seconds to rewire net---" % (t4-t3))
-<<<<<<< HEAD
 
-=======
-'''
->>>>>>> origin/master
+
+
+
+
 G=B0.copy()
 men= [n[0] for n in G.nodes(data=True) if G.node[n[0]]['bipartite']==1]#list of men
 A= [ [  ] for x in range( 11) ]
@@ -94,7 +94,7 @@ plt.title('after rewiring')
 plt.xlabel('age of men')
 plt.ylabel('age of their partners')
 plt.show()
-=======
+
 
 # t1=time.time()
 B=GAN.make_graph(nx.Graph(),g.romance,'random_edge')#generate the first network
@@ -157,7 +157,7 @@ print('after rewire',np.subtract(A,A1))
 # plt.xlabel('age of men')
 # plt.ylabel('age of their partners')
 # plt.show()
->>>>>>> origin/master
+
 
  
 NB0=NAN.make_graph(g.romance,'random_edge',OB)#generate the new  network 1 year later
